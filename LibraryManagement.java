@@ -253,8 +253,75 @@ public class LibraryManagement extends JFrame {
 
 
     private void showIssueManagementWindow() {
-        // Implement the code to display the issue management window here
+    try {
+        executeQuery("SELECT * FROM issue_details");
+    } catch (ClassNotFoundException | SQLException exception) {
+        exception.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error fetching issue details: " + exception.getMessage());
     }
+
+    JFrame issueFrame = new JFrame("Manage Issued Books");
+    issueFrame.setSize(400, 300);
+
+    JPanel issuePanel = new JPanel();
+    issuePanel.setLayout(new GridLayout(4, 2));
+
+    JLabel issueIdLabel = new JLabel("Issue ID:");
+    JTextField issueIdTextField = new JTextField();
+    JLabel readerIdLabel = new JLabel("Reader ID:");
+    JTextField readerIdTextField = new JTextField();
+    JLabel bookIdLabel = new JLabel("Book ID:");
+    JTextField bookIdTextField = new JTextField();
+    JLabel issueDateLabel = new JLabel("Issue Date:");
+    JTextField issueDateTextField = new JTextField();
+    JLabel dueDateLabel = new JLabel("Due Date:");
+    JTextField dueDateTextField = new JTextField();
+
+    JButton addButton = new JButton("Issue Book");
+    addButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                executeQuery("INSERT INTO issue_details VALUES (" + issueIdTextField.getText() + ", " +
+                        readerIdTextField.getText() + ", " +
+                        bookIdTextField.getText() + ", '" +
+                        issueDateTextField.getText() + "', '" +
+                        dueDateTextField.getText() + "')");
+            } catch (ClassNotFoundException | SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    });
+
+    JButton returnButton = new JButton("Return Book");
+    returnButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                executeQuery("DELETE FROM issue_details WHERE issue_id = " + issueIdTextField.getText());
+            } catch (ClassNotFoundException | SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    });
+
+    issuePanel.add(issueIdLabel);
+    issuePanel.add(issueIdTextField);
+    issuePanel.add(readerIdLabel);
+    issuePanel.add(readerIdTextField);
+    issuePanel.add(bookIdLabel);
+    issuePanel.add(bookIdTextField);
+    issuePanel.add(issueDateLabel);
+    issuePanel.add(issueDateTextField);
+    issuePanel.add(dueDateLabel);
+    issuePanel.add(dueDateTextField);
+    issuePanel.add(addButton);
+    issuePanel.add(returnButton);
+
+    issueFrame.add(issuePanel);
+    issueFrame.setVisible(true);
+}
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
