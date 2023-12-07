@@ -60,7 +60,6 @@ public class LibraryManagement extends JFrame {
     }
 
     private void showReaderManagementWindow() {
-        // display the reader_details in console
         try {
             executeQuery("SELECT * FROM reader_details");
         } catch (ClassNotFoundException | SQLException exception) {
@@ -69,35 +68,25 @@ public class LibraryManagement extends JFrame {
             JOptionPane.showMessageDialog(null, "Error fetching reader details: " + exception.getMessage());
         }
 
-        
-        // Create reader management window
         JFrame readerFrame = new JFrame("Manage Readers");
         readerFrame.setSize(400, 300);
 
         // Create main panel for reader window
         JPanel readerPanel = new JPanel();
         readerPanel.setLayout(new GridLayout(4, 2));
-
-        // Reader management components
         JLabel readerIdLabel = new JLabel("Reader ID:");
         JTextField readerIdTextField = new JTextField();
-
         JLabel firstNameLabel = new JLabel("First Name:");
         JTextField firstNameTextField = new JTextField();
-
         JLabel lastNameLabel = new JLabel("Last Name:");
         JTextField lastNameTextField = new JTextField();
-
         JLabel addressLabel = new JLabel("Address:");
         JTextField addressTextField = new JTextField();
-
         JLabel phoneLabel = new JLabel("Phone:");
         JTextField phoneTextField = new JTextField();
-
         JLabel emailLabel = new JLabel("Email:");
         JTextField emailTextField = new JTextField();
 
-        // Reader management buttons
         JButton addButton = new JButton("Add Reader");
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -110,9 +99,7 @@ public class LibraryManagement extends JFrame {
                             phoneTextField.getText() + "', '" +
                             emailTextField.getText() + "')");
                 } catch (ClassNotFoundException | SQLException exception) {
-                    // handle the exception
                     exception.printStackTrace();
-                    // JOptionPane.showMessageDialog(null, "Error executing the query: " + exception.getMessage());
                 }
             }
         });
@@ -124,9 +111,7 @@ public class LibraryManagement extends JFrame {
                 try {
                     executeQuery("DELETE FROM reader_details WHERE reader_id = '" + readerIdTextField.getText() + "'");
                 } catch (ClassNotFoundException | SQLException exception) {
-                    // handle the exception
                     exception.printStackTrace();
-                    // JOptionPane.showMessageDialog(null, "Error deleting reader details: " + exception.getMessage());
                 }
             }
         });
@@ -146,15 +131,11 @@ public class LibraryManagement extends JFrame {
                 try {
                     executeQuery(query.toString());
                 } catch (ClassNotFoundException | SQLException exception) {
-                    // handle the exception
                     exception.printStackTrace();
-                    // JOptionPane.showMessageDialog(null, "Error updating reader details: " + exception.getMessage());
                 }
             }
 
         });
-
-        // Add components to the reader panel
         readerPanel.add(readerIdLabel);
         readerPanel.add(readerIdTextField);
         readerPanel.add(firstNameLabel);
@@ -170,17 +151,106 @@ public class LibraryManagement extends JFrame {
         readerPanel.add(addButton);
         readerPanel.add(deleteButton);
         readerPanel.add(updateButton);
-
-        // Add the reader panel to the reader frame
         readerFrame.add(readerPanel);
-
-        // Set reader frame visibility
         readerFrame.setVisible(true);
     }
 
     private void showBookManagementWindow() {
-        // Implement the code to display the book management window here
+    try {
+        executeQuery("SELECT * FROM book_details");
+    } catch (ClassNotFoundException | SQLException exception) {
+        exception.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error fetching book details: " + exception.getMessage());
     }
+
+    JFrame bookFrame = new JFrame("Manage Books");
+    bookFrame.setSize(400, 300);
+
+    JPanel bookPanel = new JPanel();
+    bookPanel.setLayout(new GridLayout(4, 2));
+
+    JLabel bookIdLabel = new JLabel("Book ID:");
+    JTextField bookIdTextField = new JTextField();
+    JLabel titleLabel = new JLabel("Title:");
+    JTextField titleTextField = new JTextField();
+    JLabel authorLabel = new JLabel("Author:");
+    JTextField authorTextField = new JTextField();
+    JLabel genreLabel = new JLabel("Genre:");
+    JTextField genreTextField = new JTextField();
+    JLabel yearLabel = new JLabel("Publication Year:");
+    JTextField yearTextField = new JTextField();
+    JLabel quantityLabel = new JLabel("Available Quantity:");
+    JTextField quantityTextField = new JTextField();
+
+    JButton addButton = new JButton("Add Book");
+    addButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                executeQuery("INSERT INTO book_details VALUES (" + bookIdTextField.getText() + ", '" +
+                        titleTextField.getText() + "', '" +
+                        authorTextField.getText() + "', '" +
+                        genreTextField.getText() + "', " +
+                        yearTextField.getText() + ", " +
+                        quantityTextField.getText() + ")");
+            } catch (ClassNotFoundException | SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    });
+
+    JButton deleteButton = new JButton("Delete Book");
+    deleteButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                executeQuery("DELETE FROM book_details WHERE book_id = '" + bookIdTextField.getText() + "'");
+            } catch (ClassNotFoundException | SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    });
+
+    JButton updateButton = new JButton("Update Book");
+    updateButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            StringBuilder query = new StringBuilder("UPDATE book_details SET ");
+            query.append("title = '").append(titleTextField.getText()).append("', ");
+            query.append("author = '").append(authorTextField.getText()).append("', ");
+            query.append("genre = '").append(genreTextField.getText()).append("', ");
+            query.append("publication_year = ").append(yearTextField.getText()).append(", ");
+            query.append("available_quantity = ").append(quantityTextField.getText()).append(" ");
+            query.append("WHERE book_id = '").append(bookIdTextField.getText()).append("'");
+
+            try {
+                executeQuery(query.toString());
+            } catch (ClassNotFoundException | SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    });
+
+    bookPanel.add(bookIdLabel);
+    bookPanel.add(bookIdTextField);
+    bookPanel.add(titleLabel);
+    bookPanel.add(titleTextField);
+    bookPanel.add(authorLabel);
+    bookPanel.add(authorTextField);
+    bookPanel.add(genreLabel);
+    bookPanel.add(genreTextField);
+    bookPanel.add(yearLabel);
+    bookPanel.add(yearTextField);
+    bookPanel.add(quantityLabel);
+    bookPanel.add(quantityTextField);
+    bookPanel.add(addButton);
+    bookPanel.add(deleteButton);
+    bookPanel.add(updateButton);
+
+    bookFrame.add(bookPanel);
+    bookFrame.setVisible(true);
+}
+
 
     private void showIssueManagementWindow() {
         // Implement the code to display the issue management window here
